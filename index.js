@@ -31,12 +31,15 @@ async function run() {
 //Exporting all mongoDB collections
 const database = client.db("AI-Expert");
     exports.usersCollection = database.collection("users");
+    exports.blogsCollection = database.collection("Blogs");
 
 //All routes
 const userRoutes = require("./routes/users");
+const blogRoutes = require("./routes/blogs");
 
 //middlewares
 app.use(userRoutes);
+app.use(blogRoutes);
 
 
 
