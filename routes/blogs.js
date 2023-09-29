@@ -86,6 +86,34 @@ router.patch("/update-comment/:id", async (req, res) => {
         res.status(500).json({ message: "An error occurred" });
     }
 });
+// api for like
+router.patch("/like/:id", async (req, res) => {
+    try {
+        const id = req.params.id;
+        console.log(id);
+        const data = req.body;
+        console.log(data)
+        // Use ObjectId to create a filter for finding the blog post by ID
+        const filter = { _id: new ObjectId(id) };
+        
+        // Use the $push operator to add a comment to the comments array
+        const update = { $push: { likes: data } };
+
+        // Set the options to return the updated document
+        const options = { new: true };
+        
+        const updatedBlog = await blogsCollection.findOneAndUpdate(filter, update, options);
+      console.log(updatedBlog);
+        if (!updatedBlog) {
+            return res.status(404).json({ error: 'Blog post not found' });
+        }
+        
+        res.json(updatedBlog);
+    } catch (error) {
+        console.error("Error updating blog:", error);
+        res.status(500).json({ message: "An error occurred" });
+    }
+});
 
 
 
