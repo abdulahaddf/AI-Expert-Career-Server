@@ -117,7 +117,35 @@ router.patch("/like/:id", async (req, res) => {
   });
 
 
-
+// api for dislike
+router.patch("/dislike/:id", async (req, res) => {
+    try {
+      const id = req.params.id;
+      const data = req.body;
+      const { email } = data;
+  
+      // Use ObjectId to create a filter for finding the blog post by ID
+      const filter = { _id: new ObjectId(id), 'dislikes.email': { $ne: email } };
+  
+      // Use the $push operator to add a like to the dislikes array
+      const update = { $push: { dislikes: data } };
+  
+      // Set the options to return the updated document
+      const options = { new: true };
+  
+      // Find and update the blog post, checking if the user's email is not already in the dislikes array
+      const updatedBlog = await blogsCollection.findOneAndUpdate(filter, update, options);
+  
+      if (!updatedBlog) {
+        return res.status(404).json({ error: 'Blog post not found' });
+      }
+  
+      res.json(updatedBlog);
+    } catch (error) {
+      console.error("Error updating blog:", error);
+      res.status(500).json({ message: "An error occurred" });
+    }
+  });
   
 
 
