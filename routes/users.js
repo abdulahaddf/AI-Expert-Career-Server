@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { ObjectId } = require('mongodb');
- const { usersCollection  } = require("../index");
+ const { usersCollection , verifyJWT } = require("../index");
 
 
  router.get("/users", async (req, res) => {
@@ -118,40 +118,83 @@ const { ObjectId } = require('mongodb');
     }
   });
 
-  router.get("/users/admin/:email",  async (req, res) => {
-    try {
-      const email = req?.params?.email;
-      if (req?.decoded?.email !== email) {
-        return res.send({ admin: false });
-      }
-      console.log(req?.decoded?.email);
-      console.log(email);
-      const query = { email: email };
-      const user = await usersCollection.findOne(query);
-      const result = { admin: user?.role === "admin" };
-      res.send(result);
-    } catch (error) {
-      console.error("Error checking admin role:", error);
-      res.status(500).json({ message: "An error occurred" });
-    }
+
+
+
+
+
+//admin related api
+router.get("/users/admin/:email",  async (req, res) => {
+    const email = req.params.email;
+    console.log(email);
+    const query = { email: email };
+    const user = await usersCollection.findOne(query);
+    const result = { admin: user?.role === "admin" };
+    res.send(result);
+  });
+//making admin api
+  router.patch("/users/admin/:id", async (req, res) => {
+    const id = req.params.id;
+    console.log("id of user", id);
+    const filter = { _id: new ObjectId(id) };
+    const updateDoc = {
+      $set: {
+        role: "admin",
+      },
+    };
+    console.log(updateDoc);
+
+    const result = await usersCollection.updateOne(filter, updateDoc);
+    res.send(result);
   });
 
-  router.patch("/users/admin/:id", async (req, res) => {
-    try {
-      const id = req?.params?.id;
-      const filter = { _id: new ObjectId(id) };
-      const updateDoc = {
-        $set: {
-          role: "admin",
-        },
-      };
-      const result = await usersCollection.updateOne(filter, updateDoc);
-      res.send(result);
-    } catch (error) {
-      console.error("Error updating user role:", error);
-      res.status(500).json({ message: "An error occurred" });
-    }
+  // consultant related api
+  router.get("/users/consultant/:email", async (req, res) => {
+    const email = req.params.email;
+    console.log(email);
+    const query = { email: email };
+    const user = await usersCollection.findOne(query);
+    const result = { consultant: user?.role === "consultant" };
+    res.send(result);
   });
+
+  // making consultant api
+  router.patch("/users/consultant/:id", async (req, res) => {
+    const id = req.params.id;
+    console.log("id of user", id);
+    const filter = { _id: new ObjectId(id) };
+    const updateDoc = {
+      $set: {
+        role: "consultant",
+      },
+    };
+    console.log(updateDoc);
+
+    const result = await usersCollection.updateOne(filter, updateDoc);
+    res.send(result);
+  });
+
+  // making user api
+  router.patch("/users/user/:id", async (req, res) => {
+    const id = req.params.id;
+    console.log("id of user", id);
+    const filter = { _id: new ObjectId(id) };
+    const updateDoc = {
+      $set: {
+        role: "user",
+      },
+    };
+    console.log(updateDoc);
+
+    const result = await usersCollection.updateOne(filter, updateDoc);
+    res.send(result);
+  });
+
+
+
+
+
+
 
 
 
