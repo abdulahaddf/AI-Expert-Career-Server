@@ -117,7 +117,6 @@ const { ObjectId } = require('mongodb');
       res.status(500).json({ message: "An error occurred" });
     }
   });
-
   router.get("/users/admin/:email",  async (req, res) => {
     try {
       const email = req?.params?.email;

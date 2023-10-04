@@ -55,6 +55,7 @@ async function run() {
 const database = client.db("AI-Expert");
     exports.usersCollection = database.collection("users");
     exports.blogsCollection = database.collection("Blogs");
+    exports.coursesCollection = database.collection("Courses");
 
 
     app.post("/jwt", (req, res) => {
@@ -71,10 +72,12 @@ const database = client.db("AI-Expert");
 //All routes
 const userRoutes = require("./routes/users");
 const blogRoutes = require("./routes/blogs");
+const coursesRoutes = require("./routes/courses");
 
 //middlewares
 app.use(userRoutes);
 app.use(blogRoutes);
+app.use(coursesRoutes);
 
 
 
