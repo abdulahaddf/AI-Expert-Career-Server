@@ -57,6 +57,7 @@ const database = client.db("AI-Expert");
     exports.blogsCollection = database.collection("Blogs");
     exports.coursesCollection = database.collection("Courses");
     exports.promoCodesCollection = database.collection("promoCodes");
+    exports.enrollCollection = database.collection("Enrolls");
 
 
     app.post("/jwt", (req, res) => {
@@ -75,12 +76,14 @@ const userRoutes = require("./routes/users");
 const blogRoutes = require("./routes/blogs");
 const coursesRoutes = require("./routes/courses");
 const promoRoutes = require("./routes/promoCodes");
+const enrollRoutes = require("./routes/enroll");
 
 //middlewares
 app.use(userRoutes);
 app.use(blogRoutes);
 app.use(coursesRoutes);
 app.use(promoRoutes);
+app.use(enrollRoutes);
 
 
 

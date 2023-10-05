@@ -63,9 +63,7 @@ const { ObjectId } = require('mongodb');
         $set: {
           displayName: userinfo?.displayName,
           address: userinfo?.address,
-          gender: userinfo?.gender,
-          birthday: userinfo?.birthday,
-          phoneNumber: userinfo?.phoneNumber,
+          phone: userinfo?.phone,
         },
       };
       const result = await usersCollection.updateOne(
