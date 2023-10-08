@@ -45,6 +45,30 @@ router.get("/enrolled", async (req, res) => {
   });
 
 
+ //find enrolled course by id
+
+ router.get("/singleEnrolledCourse/:id", async (req, res) => {
+  const id = req?.params?.id;
+
+  try {
+    const find = { _id: new ObjectId(id) };
+
+    const result = await enrollCollection.findOne(find);
+
+    if (!result) {
+      // If no course with the specified ID is found, send a 404 Not Found response
+      return res.status(404).json({ message: "course not found" });
+    }
+
+    res.send(result);
+  } catch (error) {
+    // Handle the error here
+    console.error("Error fetching single course:", error);
+    res.status(500).json({ message: "An error occurred" });
+  }
+});
+
+
 
 
 
@@ -52,10 +76,10 @@ router.get("/enrolled", async (req, res) => {
 
   router.post('/markComplete', async (req, res) => {
     try {
-      const { userId, courseId, moduleName, contentName } = req.body;
+      const { courseId, moduleName, contentName } = req.body;
   
       // Find the user's enrollment for the specified course
-      const enrollment = await enrollCollection.findOne({ userId, courseId });
+      const enrollment = await enrollCollection.findOne({   courseId });
   
       if (!enrollment) {
         return res.status(404).json({ message: 'Enrollment not found' });
@@ -80,7 +104,7 @@ router.get("/enrolled", async (req, res) => {
   
       // Update the enrollment document in the collection
       await enrollCollection.updateOne(
-        { userId, courseId },
+        {    courseId },
         { $set: { 'course.modules': enrollment.course.modules } }
       );
   
@@ -96,7 +120,47 @@ router.get("/enrolled", async (req, res) => {
 
 
 
+// Define a route to update the main course enrollment collection
+router.post('/completedtime', async (req, res) => {
+  try {
+    const { userId, courseId } = req.body;
+console.log(courseId);
+    // Check if the user is enrolled in the course
+    const enrollment = await enrollCollection.findOne({
+      userId: userId,
+      courseId: courseId,
+    });
 
+    if (!enrollment) {
+      return res.status(404).json({ message: 'User is not enrolled in the course' });
+    }
+
+    // Update the completion status to indicate 100% progress
+    enrollment.isCompleted = true;
+
+    // Optionally, you can also update the completion time
+    enrollment.completionTime = req.body.completionTime;
+
+    // Save the updated enrollment
+    await enrollCollection.updateOne(
+      {
+        userId: userId,
+        courseId: courseId,
+      },
+      {
+        $set: {
+          isCompleted: true,
+          completionTime: req.body.completionTime,
+        },
+      }
+    );
+console.log(enrollment);
+    res.status(200).json({ message: 'Course completion status updated' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
 
 
