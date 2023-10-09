@@ -123,8 +123,9 @@ router.get("/enrolled", async (req, res) => {
 // Define a route to update the main course enrollment collection
 router.post('/completedtime', async (req, res) => {
   try {
-    const { userId, courseId } = req.body;
-console.log(courseId);
+    const { userId, courseId, completionTime } = req.body;
+    console.log(courseId);
+
     // Check if the user is enrolled in the course
     const enrollment = await enrollCollection.findOne({
       userId: userId,
@@ -135,32 +136,34 @@ console.log(courseId);
       return res.status(404).json({ message: 'User is not enrolled in the course' });
     }
 
-    // Update the completion status to indicate 100% progress
-    enrollment.isCompleted = true;
+    // If neither completionTime nor isCompleted exists, update both
+    if (!enrollment.completionTime && !enrollment.isCompleted) {
+      enrollment.completionTime = completionTime;
+      enrollment.isCompleted = true;
 
-    // Optionally, you can also update the completion time
-    enrollment.completionTime = req.body.completionTime;
-
-    // Save the updated enrollment
-    await enrollCollection.updateOne(
-      {
-        userId: userId,
-        courseId: courseId,
-      },
-      {
-        $set: {
-          isCompleted: true,
-          completionTime: req.body.completionTime,
+      // Save the updated enrollment
+      await enrollCollection.updateOne(
+        {
+          userId: userId,
+          courseId: courseId,
         },
-      }
-    );
-console.log(enrollment);
+        {
+          $set: {
+            completionTime: completionTime,
+            isCompleted: true,
+          },
+        }
+      );
+    }
+
+    console.log(enrollment);
     res.status(200).json({ message: 'Course completion status updated' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
   }
 });
+
 
 
 
