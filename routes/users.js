@@ -122,10 +122,11 @@ const { ObjectId } = require('mongodb');
         return res.send({ admin: false });
       }
       console.log(req?.decoded?.email);
-      console.log(email);
+      console.log("admin email", email);
       const query = { email: email };
       const user = await usersCollection.findOne(query);
       const result = { admin: user?.role === "admin" };
+      console.log("result", result);
       res.send(result);
     } catch (error) {
       console.error("Error checking admin role:", error);

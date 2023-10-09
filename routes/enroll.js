@@ -167,7 +167,28 @@ router.post('/completedtime', async (req, res) => {
 
 
 
-
+// course approval by admin
+router.patch("/enrollStatus/:id", async (req, res) => {
+  try {
+    const id = req?.params?.id;
+    console.log(id);
+    const filter = { _id: new ObjectId(id) };
+    const statusdata = req?.body;
+    // const options = { upsert: true };
+    const updateDoc = {
+      $set: {
+        status: statusdata?.status,
+      },
+    };
+    console.log(id,statusdata)
+    const result = await enrollCollection.updateOne(filter, updateDoc);
+    res.send(result);
+  } catch (error) {
+    // Handle any unexpected errors here
+    console.error("Error updating payment status:", error);
+    res.status(500).json({ success: false, message: "An error occurred" });
+  }
+});
 
 
 
