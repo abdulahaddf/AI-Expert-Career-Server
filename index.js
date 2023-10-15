@@ -9,7 +9,6 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-
 exports.verifyJWT = (req, res, next) => {
   const authorization = req.headers.authorization;
   if (!authorization) {
@@ -29,9 +28,6 @@ exports.verifyJWT = (req, res, next) => {
   });
 };
 
-
-
-
 // Data-Base start
 const { MongoClient, ServerApiVersion } = require("mongodb");
 const uri = `mongodb+srv://${process.env.MONGODB_USER_NAME}:${process.env.MONGODB_PASSWORD}@cluster0.0iomqcc.mongodb.net/?retryWrites=true&w=majority`;
@@ -50,16 +46,14 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
 
-
-//Exporting all mongoDB collections
-const database = client.db("AI-Expert");
+    //Exporting all mongoDB collections
+    const database = client.db("AI-Expert");
     exports.usersCollection = database.collection("users");
     exports.blogsCollection = database.collection("Blogs");
     exports.coursesCollection = database.collection("Courses");
     exports.promoCodesCollection = database.collection("promoCodes");
     exports.enrollCollection = database.collection("Enrolls");
     exports.bannersCollection = database.collection("Banners");
-
 
     app.post("/jwt", (req, res) => {
       const user = req.body;
@@ -70,28 +64,21 @@ const database = client.db("AI-Expert");
       res.send({ token });
     });
 
+    //All routes
+    const userRoutes = require("./routes/users");
+    const blogRoutes = require("./routes/blogs");
+    const coursesRoutes = require("./routes/courses");
+    const promoRoutes = require("./routes/promoCodes");
+    const enrollRoutes = require("./routes/enroll");
+    const bannerRoutes = require("./routes/banners");
 
-
-//All routes
-const userRoutes = require("./routes/users");
-const blogRoutes = require("./routes/blogs");
-const coursesRoutes = require("./routes/courses");
-const promoRoutes = require("./routes/promoCodes");
-const enrollRoutes = require("./routes/enroll");
-const bannerRoutes = require("./routes/banners");
-
-//middlewares
-app.use(userRoutes);
-app.use(blogRoutes);
-app.use(coursesRoutes);
-app.use(promoRoutes);
-app.use(enrollRoutes);
-app.use(bannerRoutes);
-
-
-
-
-
+    //middlewares
+    app.use(userRoutes);
+    app.use(blogRoutes);
+    app.use(coursesRoutes);
+    app.use(promoRoutes);
+    app.use(enrollRoutes);
+    app.use(bannerRoutes);
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
