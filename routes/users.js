@@ -72,6 +72,38 @@ router.patch("/userinfoupdate", async (req, res) => {
     res.status(500).json({ message: "An error occurred" });
   }
 });
+// Consultant info update
+router.patch("/consultantinfoupdate", async (req, res) => {
+  try {
+    const query = req?.query?.email;
+    const filter = { email: query };
+    const userinfo = req?.body;
+    const options = { upsert: true };
+    const updateDoc = {
+      $set: {
+        displayName: userinfo?.displayName,
+        email: userinfo?.email,
+        phone: userinfo?.phone,
+        designation: userinfo?.designation,
+        description: userinfo?.description,
+        about: userinfo?.about,
+        recentWorks: userinfo?.recentWorks,
+        successes: userinfo?.successes,
+        experience: userinfo?.experience,
+        qualification: userinfo?.qualification,
+        availability: userinfo?.availability,
+        selectedDays: userinfo?.selectedDays,
+        workingWith: userinfo?.workingWith,
+      },
+    };
+    const result = await usersCollection.updateOne(filter, updateDoc, options);
+    res.send(result);
+    console.log(result);
+  } catch (error) {
+    console.error("Error updating user information:", error);
+    res.status(500).json({ message: "An error occurred" });
+  }
+});
 
 router.patch("/userpictureupdate", async (req, res) => {
   try {
