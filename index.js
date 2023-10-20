@@ -54,6 +54,7 @@ async function run() {
     exports.promoCodesCollection = database.collection("promoCodes");
     exports.enrollCollection = database.collection("Enrolls");
     exports.bannersCollection = database.collection("Banners");
+    exports.appointmentsCollection = database.collection("Appointments");
 
     app.post("/jwt", (req, res) => {
       const user = req.body;
@@ -71,6 +72,7 @@ async function run() {
     const promoRoutes = require("./routes/promoCodes");
     const enrollRoutes = require("./routes/enroll");
     const bannerRoutes = require("./routes/banners");
+    const appointmentsRoutes = require("./routes/appointments");
 
     //middlewares
     app.use(userRoutes);
@@ -79,6 +81,7 @@ async function run() {
     app.use(promoRoutes);
     app.use(enrollRoutes);
     app.use(bannerRoutes);
+    app.use(appointmentsRoutes);
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
