@@ -73,6 +73,7 @@ async function run() {
     const enrollRoutes = require("./routes/enroll");
     const bannerRoutes = require("./routes/banners");
     const appointmentsRoutes = require("./routes/appointments");
+    const mailRoutes = require("./routes/mail");
 
     //middlewares
     app.use(userRoutes);
@@ -82,6 +83,7 @@ async function run() {
     app.use(enrollRoutes);
     app.use(bannerRoutes);
     app.use(appointmentsRoutes);
+    app.use(mailRoutes);
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
