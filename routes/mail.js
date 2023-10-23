@@ -1,24 +1,23 @@
 const express = require("express");
 const router = express.Router();
 const nodemailer = require("nodemailer");
-const { OAuth2Client } = require("google-auth-library");
+// const { OAuth2Client } = require("google-auth-library");
 
 // Replace with your Gmail API credentials (use environment variables)
-const oauth2Client = new OAuth2Client({
-  clientId: process.env.CLIENT_ID,
-  clientSecret: process.env.CLIENT_SECRET,
-  // redirectUri: "YOUR_REDIRECT_URI",
-});
+// const oauth2Client = new OAuth2Client({
+//   clientId: process.env.CLIENT_ID,
+//   clientSecret: process.env.CLIENT_SECRET,
+// });
 
 // Generate an OAuth URL for user consent
-router.get("/auth-url", (req, res) => {
-  const authUrl = oauth2Client.generateAuthUrl({
-    access_type: "offline", // Enables a refresh token
-    scope: ["https://www.googleapis.com/auth/gmail.send"],
-  });
+// router.get("/auth-url", (req, res) => {
+//   const authUrl = oauth2Client.generateAuthUrl({
+//     access_type: "offline", // Enables a refresh token
+//     scope: ["https://www.googleapis.com/auth/gmail.send"],
+//   });
 
-  res.json({ authUrl });
-});
+//   res.json({ authUrl });
+// });
 
 // Handle the OAuth callback and send the email
 router.post("/send-email", async (req, res) => {
