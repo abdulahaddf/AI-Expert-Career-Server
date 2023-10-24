@@ -9,6 +9,7 @@ const nodemailer = require("nodemailer");
 //   clientSecret: process.env.CLIENT_SECRET,
 // });
 
+
 // Generate an OAuth URL for user consent
 // router.get("/auth-url", (req, res) => {
 //   const authUrl = oauth2Client.generateAuthUrl({
