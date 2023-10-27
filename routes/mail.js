@@ -56,7 +56,7 @@ router.post("/send-email", async (req, res) => {
       from: "developer.aiec@gmail.com", 
       to: [toEmail1, toEmail2], 
       subject: subject,
-      text: message,
+      html: message,
     };
 
     // Send the email
