@@ -86,7 +86,6 @@ router.patch("/consultantinfoupdate", async (req, res) => {
         phone: userinfo?.phone,
         designation: userinfo?.designation,
         description: userinfo?.description,
-        about: userinfo?.about,
         recentWorks: userinfo?.recentWorks,
         successes: userinfo?.successes,
         experience: userinfo?.experience,
@@ -94,6 +93,10 @@ router.patch("/consultantinfoupdate", async (req, res) => {
         availability: userinfo?.availability,
         selectedDays: userinfo?.selectedDays,
         workingWith: userinfo?.workingWith,
+        summary: userinfo?.summary,
+        facebook: userinfo?.facebook,
+        linkedin: userinfo?.linkedin,
+        twitter: userinfo?.twitter,
       },
     };
     const result = await usersCollection.updateOne(filter, updateDoc, options);

@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { newsletterCollection } = require("../index");
+const { newsletterCollection,seminarCollection } = require("../index");
 
 //adding 
 router.post("/newsletter", async (req, res) => {
@@ -17,7 +17,7 @@ router.get("/newsletters", async (req, res) => {
   const result = await newsletterCollection.find().sort({ createAt: -1 }).toArray();
   res.send(result);
 });
-// delete
+// delete if needed
 router.delete("/newsletter/:id", async (req, res) => {
     try {
       const id = req?.params?.id;
@@ -30,5 +30,38 @@ router.delete("/newsletter/:id", async (req, res) => {
       res.status(500).json({ success: false, message: "An error occurred" });
     }
   });
+
+
+
+
+
+
+// Seminar API
+
+//adding 
+router.post("/seminar", async (req, res) => {
+  const data = req.body;
+console.log(data);
+  data.createAt = new Date();
+  const result = await seminarCollection.insertOne(data);
+  res.send(result);
+});
+
+
+//get all 
+router.get("/seminars", async (req, res) => {
+  const result = await seminarCollection.find().sort({ createAt: -1 }).toArray();
+  res.send(result);
+});
+
+
+
+
+
+
+
+
+
+
 
 module.exports = router;
