@@ -41,6 +41,7 @@ router.patch("/update-blog/:id", async (req, res) => {
         const blog = {
           $set: {
             blogName: updatedBlog.blogName,
+            min: updatedBlog.min,
             category: updatedBlog.category,
             subcategory: updatedBlog.subcategory,
             selectedTags: updatedBlog.selectedTags,
