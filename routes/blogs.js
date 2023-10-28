@@ -179,8 +179,29 @@ router.patch("/dislike/:id", async (req, res) => {
 
 
 
-
-
+// Increment the view of blog view
+  router.put('/increment-view-count/:blogId', async (req, res) => {
+    const { blogId } = req.params;
+  
+   
+  
+    try {
+      // Find the blog by its _id and update the view count
+      const result = await blogsCollection.findOneAndUpdate(
+        { _id: new ObjectId(blogId) },
+        { $inc: { view: 1 } }
+      );
+  console.log(result)
+      if (!result.value) {
+        return res.status(404).json({ error: 'Blog not found' });
+      }
+  
+      return res.json({ message: 'View count incremented successfully' });
+    } catch (err) {
+      return res.status(500).json({ error: 'Internal server error' });
+    } 
+    
+  });
 
 
 
