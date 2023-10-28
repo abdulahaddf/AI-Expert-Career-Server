@@ -33,6 +33,23 @@ router.get("/userinfo", async (req, res) => {
   }
 });
 
+  //get user by ID
+  router.get("/user/:id", async (req, res) => {
+    try {
+        const id = req.params.id;
+        const query = { _id: new ObjectId(id) };
+        
+        const result = await usersCollection.findOne(query);
+        res.send(result);
+    }
+    catch (error) {
+        console.error("Error getting blog:", error);
+        res.status(500).json({ message: "An error occurred" });
+      }
+
+   
+  });
+
 router.post("/users", async (req, res) => {
   try {
     const user = req?.body;
