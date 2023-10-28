@@ -27,7 +27,7 @@ router.get("/enrolled-course", async (req, res) => {
     const query = { email: email };
     const result = await enrollCollection
       .find(query)
-      .sort({ date: -1 })
+      .sort({ createAt: -1 })
       .toArray();
     res.send(result);
     //   console.log(result);

@@ -27,7 +27,7 @@ router.get("/appoints", async (req, res) => {
     const query = { email: email };
     const result = await appointmentsCollection
       .find(query)
-      .sort({ date: -1 })
+      .sort({ createAt: -1 })
       .toArray();
     res.send(result);
     //   console.log(result);
@@ -178,9 +178,10 @@ router.patch("/appointRequest/:id", async (req, res) => {
 router.patch("/appointConfirmation/:id", async (req, res) => {
   try {
     const id = req?.params?.id;
-    console.log(id);
+    // console.log(id);
     const filter = { _id: new ObjectId(id) };
     const statusdata = req?.body;
+    // console.log(statusdata)
     // const options = { upsert: true };
     const updateDoc = {
       $set: {
