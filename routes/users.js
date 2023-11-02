@@ -33,22 +33,19 @@ router.get("/userinfo", async (req, res) => {
   }
 });
 
-  //get user by ID
-  router.get("/user/:id", async (req, res) => {
-    try {
-        const id = req.params.id;
-        const query = { _id: new ObjectId(id) };
-        
-        const result = await usersCollection.findOne(query);
-        res.send(result);
-    }
-    catch (error) {
-        console.error("Error getting blog:", error);
-        res.status(500).json({ message: "An error occurred" });
-      }
+//get user by ID
+router.get("/user/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const query = { _id: new ObjectId(id) };
 
-   
-  });
+    const result = await usersCollection.findOne(query);
+    res.send(result);
+  } catch (error) {
+    console.error("Error getting blog:", error);
+    res.status(500).json({ message: "An error occurred" });
+  }
+});
 
 router.post("/users", async (req, res) => {
   try {
@@ -196,7 +193,7 @@ router.patch("/users/admin/:id", async (req, res) => {
 //admin related api
 router.get("/users/admin/:email", async (req, res) => {
   const email = req.params.email;
-  console.log("admin mail",email);
+  console.log("admin mail", email);
   const query = { email: email };
   const user = await usersCollection.findOne(query);
   const result = { admin: user?.role === "admin" };
@@ -259,21 +256,5 @@ router.patch("/users/user/:id", async (req, res) => {
   const result = await usersCollection.updateOne(filter, updateDoc);
   res.send(result);
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 module.exports = router;

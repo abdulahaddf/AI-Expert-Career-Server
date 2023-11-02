@@ -14,7 +14,10 @@ router.post("/appoint", async (req, res) => {
 
 //get all Appointments
 router.get("/appointments", async (req, res) => {
-  const result = await appointmentsCollection.find().sort({ createAt: -1 }).toArray();
+  const result = await appointmentsCollection
+    .find()
+    .sort({ createAt: -1 })
+    .toArray();
   res.send(result);
 });
 
@@ -207,12 +210,16 @@ router.patch("/payment/:id", async (req, res) => {
     const options = { upsert: true };
     const updateDoc = {
       $set: {
-        tId : data.tId,
-        senderNumber : data.senderNumber,
+        tId: data.tId,
+        senderNumber: data.senderNumber,
       },
     };
     // console.log(id, data);
-    const result = await appointmentsCollection.updateOne(filter, updateDoc, options);
+    const result = await appointmentsCollection.updateOne(
+      filter,
+      updateDoc,
+      options
+    );
     res.send(result);
   } catch (error) {
     // Handle any unexpected errors here
