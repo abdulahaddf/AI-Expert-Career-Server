@@ -59,6 +59,7 @@ async function run() {
     exports.seminarCollection = database.collection("Seminar");
     exports.feedbackCollection = database.collection("OurFeedback");
     exports.reviewCollection = database.collection("ConsultantReviews");
+    exports.partnerCollection = database.collection("Partners");
 
     app.post("/jwt", (req, res) => {
       const user = req.body;
