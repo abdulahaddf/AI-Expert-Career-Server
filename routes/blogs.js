@@ -82,73 +82,59 @@ router.patch("/update-comment/:id", async (req, res) => {
     res.status(500).json({ message: "An error occurred" });
   }
 });
+
+
+
 // api for like
+
 router.patch("/like/:id", async (req, res) => {
   try {
     const id = req.params.id;
     const data = req.body;
-    const { email } = data;
+    const { email, status } = data;
+console.log(data);
+    const filter = { _id: new ObjectId(id), 'likes.email': email };
 
-    // Use ObjectId to create a filter for finding the blog post by ID
-    const filter = { _id: new ObjectId(id), "likes.email": { $ne: email } };
+    // Check if the user already exists in the 'likes' array
+    const userExists = await blogsCollection.findOne(filter);
 
-    // Use the $push operator to add a like to the likes array
-    const update = { $push: { likes: data } };
+    const update = {
+      // Use $set to update the status for the user
+      $set: { 'likes.$.status': status },
+    };
 
-    // Set the options to return the updated document
     const options = { new: true };
 
-    // Find and update the blog post, checking if the user's email is not already in the likes array
-    const updatedBlog = await blogsCollection.findOneAndUpdate(
-      filter,
-      update,
-      options
-    );
-
-    if (!updatedBlog) {
-      return res.status(404).json({ error: "Blog post not found" });
+    if (userExists) {
+      // If the user exists, update their status
+      const updatedBlog = await blogsCollection.findOneAndUpdate(
+        filter,
+        update,
+        options
+      );
+      res.json(updatedBlog);
+    } else {
+      // If the user doesn't exist, add a new entry
+      const addToSetUpdate = {
+        $addToSet: { 'likes': { email, status } },
+      };
+      const newBlog = await blogsCollection.findOneAndUpdate(
+        { _id: new ObjectId(id) },
+        addToSetUpdate,
+        options
+      );
+      res.json(newBlog)
     }
-
-    res.json(updatedBlog);
+    // console.log(newBlog)
   } catch (error) {
     console.error("Error updating blog:", error);
     res.status(500).json({ message: "An error occurred" });
   }
 });
 
-// api for dislike
-router.patch("/dislike/:id", async (req, res) => {
-  try {
-    const id = req.params.id;
-    const data = req.body;
-    const { email } = data;
 
-    // Use ObjectId to create a filter for finding the blog post by ID
-    const filter = { _id: new ObjectId(id), "dislikes.email": { $ne: email } };
 
-    // Use the $push operator to add a like to the dislikes array
-    const update = { $push: { dislikes: data } };
 
-    // Set the options to return the updated document
-    const options = { new: true };
-
-    // Find and update the blog post, checking if the user's email is not already in the dislikes array
-    const updatedBlog = await blogsCollection.findOneAndUpdate(
-      filter,
-      update,
-      options
-    );
-
-    if (!updatedBlog) {
-      return res.status(404).json({ error: "Blog post not found" });
-    }
-
-    res.json(updatedBlog);
-  } catch (error) {
-    console.error("Error updating blog:", error);
-    res.status(500).json({ message: "An error occurred" });
-  }
-});
 
 //adding blogs
 router.post("/blogs", async (req, res) => {
