@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const { newsletterCollection, seminarCollection } = require("../index");
+const {
+  newsletterCollection,
+  seminarCollection,
+  bookedCourseCollection,
+} = require("../index");
 
 //adding
 router.post("/newsletter", async (req, res) => {
@@ -38,7 +42,7 @@ router.delete("/newsletter/:id", async (req, res) => {
 //adding
 router.post("/seminar", async (req, res) => {
   const data = req.body;
-  console.log(data);
+  // console.log(data);
   data.createAt = new Date();
   const result = await seminarCollection.insertOne(data);
   res.send(result);
@@ -50,6 +54,35 @@ router.get("/seminars", async (req, res) => {
     .find()
     .sort({ createAt: -1 })
     .toArray();
+  res.send(result);
+});
+
+
+
+
+//get all bookedCourse
+router.get("/bookedCourse", async (req, res) => {
+  const result = await bookedCourseCollection
+    .find()
+    .sort({ createAt: -1 })
+    .toArray();
+  res.send(result);
+});
+
+//adding bookedCourse
+router.post("/bookCourse", async (req, res) => {
+  const newbookedCourse = req.body;
+  newbookedCourse.createAt = new Date();
+  console.log(newbookedCourse);
+  const result = await bookedCourseCollection.insertOne(newbookedCourse);
+  res.send(result);
+});
+
+// delete bookedCourse
+router.delete("/singlebookedCourse/:id", async (req, res) => {
+  const id = req.params.id;
+  const query = { _id: new ObjectId(id) };
+  const result = await bookedCourseCollection.deleteOne(query);
   res.send(result);
 });
 

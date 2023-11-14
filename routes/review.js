@@ -77,4 +77,8 @@ router.delete("/singlepartner/:id", async (req, res) => {
   res.send(result);
 });
 
+
+
+
+
 module.exports = router;

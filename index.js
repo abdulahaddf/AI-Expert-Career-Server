@@ -57,6 +57,7 @@ async function run() {
     exports.appointmentsCollection = database.collection("Appointments");
     exports.newsletterCollection = database.collection("Newsletter");
     exports.seminarCollection = database.collection("Seminar");
+    exports.bookedCourseCollection = database.collection("BookedCourse");
     exports.feedbackCollection = database.collection("OurFeedback");
     exports.reviewCollection = database.collection("ConsultantReviews");
     exports.partnerCollection = database.collection("Partners");
