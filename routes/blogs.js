@@ -22,7 +22,7 @@ router.get("/blogs", async (req, res) => {
 //   }
 // });
 
-router.get("/singleblog/:name", async (req, res) => {
+router.get("/blog/:name", async (req, res) => {
   try {
     const encodedName = req.params.name;
     const decodedName = decodeURIComponent(encodedName);
