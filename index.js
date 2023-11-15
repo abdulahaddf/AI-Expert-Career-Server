@@ -61,6 +61,7 @@ async function run() {
     exports.feedbackCollection = database.collection("OurFeedback");
     exports.reviewCollection = database.collection("ConsultantReviews");
     exports.partnerCollection = database.collection("Partners");
+    exports.notificationCollection = database.collection("Notifications");
 
     app.post("/jwt", (req, res) => {
       const user = req.body;
@@ -82,6 +83,7 @@ async function run() {
     const mailRoutes = require("./routes/mail");
     const newsLetterRoutes = require("./routes/newsLetter");
     const reviewRoutes = require("./routes/review");
+    const notificationRoutes = require("./routes/notification");
 
     //middlewares
     app.use(userRoutes);
@@ -94,6 +96,7 @@ async function run() {
     app.use(mailRoutes);
     app.use(newsLetterRoutes);
     app.use(reviewRoutes);
+    app.use(notificationRoutes);
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
