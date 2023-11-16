@@ -3,23 +3,23 @@ const router = express.Router();
 const { ObjectId } = require("mongodb");
 const { notificationCollection } = require("../index");
 
-//get all bookedCourse
+//get all notifications
 router.get("/notifications", async (req, res) => {
-    const result = await notificationCollection
-      .find()
-      .sort({ createAt: -1 })
-      .toArray();
-    res.send(result);
-  });
-  
-  //post notification
-  router.post("/notification", async (req, res) => {
-    const notif = req.body;
-    notif.createAt = new Date();
-    const result = await notificationCollection.insertOne(notif);
-    res.send(result);
-  });
+  const result = await notificationCollection
+    .find()
+    .sort({ createAt: -1 })
+    .toArray();
+  res.send(result);
+});
 
+//post notification
+router.post("/notification", async (req, res) => {
+  const notif = req.body;
+  notif.createAt = new Date();
+  const result = await notificationCollection.insertOne(notif);
+  res.send(result);
+});
+// delete notification
 router.delete("/notifi/:id", async (req, res) => {
   try {
     const id = req?.params?.id;
