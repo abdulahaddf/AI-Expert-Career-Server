@@ -28,9 +28,9 @@ router.get("/blog/:name", async (req, res) => {
     const decodedName = decodeURIComponent(encodedName);
 
     const query = { blogName: decodedName };
-    
+
     const result = await blogsCollection.findOne(query);
-    
+
     if (!result) {
       // If the blog with the decoded name is not found, you can handle it accordingly
       res.status(404).json({ message: "Blog not found" });
@@ -43,12 +43,6 @@ router.get("/blog/:name", async (req, res) => {
     res.status(500).json({ message: "An error occurred" });
   }
 });
-
-
-
-
-
-
 
 //get blogs by ID
 router.get("/singleblogs/:id", async (req, res) => {
@@ -63,10 +57,6 @@ router.get("/singleblogs/:id", async (req, res) => {
     res.status(500).json({ message: "An error occurred" });
   }
 });
-
-
-
-
 
 // update blog
 router.patch("/update-blog/:id", async (req, res) => {
@@ -129,8 +119,6 @@ router.patch("/update-comment/:id", async (req, res) => {
   }
 });
 
-
-
 // api for like
 
 router.patch("/like/:id", async (req, res) => {
@@ -138,15 +126,15 @@ router.patch("/like/:id", async (req, res) => {
     const id = req.params.id;
     const data = req.body;
     const { email, status } = data;
-console.log(data);
-    const filter = { _id: new ObjectId(id), 'likes.email': email };
+    console.log(data);
+    const filter = { _id: new ObjectId(id), "likes.email": email };
 
     // Check if the user already exists in the 'likes' array
     const userExists = await blogsCollection.findOne(filter);
 
     const update = {
       // Use $set to update the status for the user
-      $set: { 'likes.$.status': status },
+      $set: { "likes.$.status": status },
     };
 
     const options = { new: true };
@@ -162,14 +150,14 @@ console.log(data);
     } else {
       // If the user doesn't exist, add a new entry
       const addToSetUpdate = {
-        $addToSet: { 'likes': { email, status } },
+        $addToSet: { likes: { email, status } },
       };
       const newBlog = await blogsCollection.findOneAndUpdate(
         { _id: new ObjectId(id) },
         addToSetUpdate,
         options
       );
-      res.json(newBlog)
+      res.json(newBlog);
     }
     // console.log(newBlog)
   } catch (error) {
@@ -177,10 +165,6 @@ console.log(data);
     res.status(500).json({ message: "An error occurred" });
   }
 });
-
-
-
-
 
 //adding blogs
 router.post("/blogs", async (req, res) => {
