@@ -3,13 +3,23 @@ const router = express.Router();
 const { ObjectId } = require("mongodb");
 const { usersCollection, verifyJWT } = require("../index");
 
-router.get("/users", async (req, res) => {
+// get all users 
+router.get("/users",verifyJWT, async (req, res) => {
   try {
     const result = await usersCollection.find().toArray();
     res.json(result);
   } catch (error) {
     console.error("Error fetching users:", error);
     res.status(500).json({ message: "An error occurred" });
+  }
+});
+// get consultants
+router.get("/allconsultants", async (req, res) => {
+  try {
+    const consultants = await usersCollection.find({ role: "consultant" }).toArray();
+    res.send(consultants);
+  } catch (error) {
+    res.status(500).send({ error: "Failed to fetch consultants" });
   }
 });
 
@@ -76,6 +86,12 @@ router.patch("/userinfoupdate", async (req, res) => {
         displayName: userinfo?.displayName,
         address: userinfo?.address,
         phone: userinfo?.phone,
+        occupation: userinfo?.occupation,
+        position: userinfo?.position,
+        field: userinfo?.field,
+        job: userinfo?.job,
+        description: userinfo?.description,
+        social: userinfo?.social,
       },
     };
     const result = await usersCollection.updateOne(filter, updateDoc, options);
@@ -216,7 +232,7 @@ router.patch("/users/admin/:id", async (req, res) => {
 });
 
 // consultant related api
-router.get("/users/consultant/:email", async (req, res) => {
+router.get("/users/consultant/:email",verifyJWT, async (req, res) => {
   const email = req.params.email;
   console.log(email);
   const query = { email: email };
