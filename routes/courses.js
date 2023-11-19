@@ -59,6 +59,7 @@ router.patch("/update-course/:id", async (req, res) => {
         cover: updatedCourse.cover,
         coverVideo: updatedCourse.coverVideo,
         courseType: updatedCourse.courseType,
+        liveInstruction : updatedCourse.liveInstruction,
         courseModel: updatedCourse.courseModel,
         courseFee: updatedCourse.courseFee,
         discount: updatedCourse.discount,
