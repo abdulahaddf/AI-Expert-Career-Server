@@ -12,6 +12,7 @@ router.get("/notifications", async (req, res) => {
   res.send(result);
 });
 
+
 //post notification
 router.post("/notification", async (req, res) => {
   const notif = req.body;
