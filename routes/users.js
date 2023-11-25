@@ -6,7 +6,7 @@ const { usersCollection, verifyJWT } = require("../index");
 // get all users 
 router.get("/users",verifyJWT, async (req, res) => {
   try {
-    const result = await usersCollection.find().toArray();
+    const result = await usersCollection.find().sort({ createdAt: -1 }).toArray();
     res.json(result);
   } catch (error) {
     console.error("Error fetching users:", error);
@@ -16,7 +16,7 @@ router.get("/users",verifyJWT, async (req, res) => {
 // get consultants
 router.get("/allconsultants", async (req, res) => {
   try {
-    const consultants = await usersCollection.find({ role: "consultant" }).toArray();
+    const consultants = await usersCollection.find({ role: "consultant" }).sort({ createdAt: -1 }).toArray();
     res.send(consultants);
   } catch (error) {
     res.status(500).send({ error: "Failed to fetch consultants" });
@@ -60,10 +60,11 @@ router.get("/user/:id", async (req, res) => {
 router.post("/users", async (req, res) => {
   try {
     const user = req?.body;
+    user.createdAt = new Date();
     console.log(user);
     const query = { email: user?.email };
     const existingUser = await usersCollection.findOne(query);
-
+    
     if (existingUser) {
       return res.send({ message: "user exists" });
     }
