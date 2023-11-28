@@ -56,6 +56,20 @@ router.get("/user/:id", async (req, res) => {
     res.status(500).json({ message: "An error occurred" });
   }
 });
+//get user by Name
+router.get("/user-name/:name", async (req, res) => {
+  try {
+    const name = req.params.name;
+    // console.log(name);
+    const query = { displayName: name };
+
+    const result = await usersCollection.findOne(query);
+    res.send(result);
+  } catch (error) {
+    console.error("Error getting blog:", error);
+    res.status(500).json({ message: "An error occurred" });
+  }
+});
 
 router.post("/users", async (req, res) => {
   try {

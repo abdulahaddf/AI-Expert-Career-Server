@@ -22,28 +22,6 @@ router.get("/blog/:name", async (req, res) => {
   }
 });
 
-// router.get("/blog/:name", async (req, res) => {
-//   try {
-//     const encodedName = req.params.name;
-//     const decodedName = decodeURIComponent(encodedName);
-
-//     const query = { blogName: decodedName };
-
-//     const result = await blogsCollection.findOne(query);
-
-//     if (!result) {
-//       // If the blog with the decoded name is not found, you can handle it accordingly
-//       res.status(404).json({ message: "Blog not found" });
-//       return;
-//     }
-
-//     res.json(result);
-//   } catch (error) {
-//     console.error("Error getting blog:", error);
-//     res.status(500).json({ message: "An error occurred" });
-//   }
-// });
-
 //get blogs by ID
 router.get("/singleblogs/:id", async (req, res) => {
   try {
