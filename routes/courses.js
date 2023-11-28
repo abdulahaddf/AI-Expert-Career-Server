@@ -25,6 +25,21 @@ router.get("/singlecourse/:id", async (req, res) => {
   }
 });
 
+//get courses by Title
+router.get("/single-course/:title", async (req, res) => {
+  try {
+    const title = req.params.title;
+    // console.log(title);
+    const query = { title: title };
+
+    const result = await coursesCollection.findOne(query);
+    res.send(result);
+  } catch (error) {
+    console.error("Error getting Course:", error);
+    res.status(500).json({ message: "An error occurred" });
+  }
+});
+
 //adding courses
 router.post("/courses", async (req, res) => {
   const newcourses = req.body;
@@ -33,6 +48,7 @@ router.post("/courses", async (req, res) => {
   const result = await coursesCollection.insertOne(newcourses);
   res.send(result);
 });
+
 
 // delete courses
 router.delete("/singlecourses/:id", async (req, res) => {
