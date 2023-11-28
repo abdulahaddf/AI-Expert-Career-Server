@@ -25,6 +25,7 @@ router.get("/singlecourse/:id", async (req, res) => {
   }
 });
 
+
 //get courses by Title
 router.get("/single-course/:title", async (req, res) => {
   try {
