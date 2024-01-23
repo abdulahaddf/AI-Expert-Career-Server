@@ -63,10 +63,10 @@ router.get("/singleEnrolledCourse/:id", async (req, res) => {
 
 router.post("/markComplete", async (req, res) => {
   try {
-    const { courseId, moduleName, contentName } = req.body;
+    const { userId, courseId, moduleName, contentName } = req.body;
 
     // Find the user's enrollment for the specified course
-    const enrollment = await enrollCollection.findOne({ courseId });
+    const enrollment = await enrollCollection.findOne({ userId, courseId });
 
     if (!enrollment) {
       return res.status(404).json({ message: "Enrollment not found" });
@@ -76,6 +76,7 @@ router.post("/markComplete", async (req, res) => {
     const moduleIndex = enrollment.course.modules.findIndex(
       (module) => module.title.toString() === moduleName
     );
+
     if (moduleIndex === -1) {
       return res.status(404).json({ message: "Module not found" });
     }
@@ -94,9 +95,13 @@ router.post("/markComplete", async (req, res) => {
     moduleToUpdate.contents[contentIndex].completed = true;
 
     // Update the enrollment document in the collection
-    await enrollCollection.updateOne(
-      { courseId },
-      { $set: { "course.modules": enrollment.course.modules } }
+    await enrollCollection.findOneAndUpdate(
+      { userId, courseId },
+      {
+        $set: {
+          [`course.modules.${moduleIndex}.contents.${contentIndex}.completed`]: true,
+        },
+      }
     );
 
     return res.status(200).json({ message: "Content marked as complete" });
@@ -105,6 +110,7 @@ router.post("/markComplete", async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 });
+
 
 // Define a route to update the main course enrollment collection
 router.post("/completedtime", async (req, res) => {
@@ -174,5 +180,31 @@ router.patch("/enrollStatus/:id", async (req, res) => {
     res.status(500).json({ success: false, message: "An error occurred" });
   }
 });
+
+// Checking if the user is enrolled or not
+router.get("/check-enrollment", async (req, res) => {
+  try {
+    const { courseId, email } = req.query;
+
+    const query = { courseId, email }; // Assuming the field names in your collection are courseId and email
+// console.log(query)
+    const result = await enrollCollection.findOne(query);
+
+    if (result) {
+      // Enrollment found
+      res.json({ enrolled: true });
+    } else {
+      // Enrollment not found
+      res.json({ enrolled: false });
+    }
+  } catch (error) {
+    console.error("Error checking enrollment:", error);
+    res.status(500).json({ message: "An error occurred" });
+  }
+});
+
+
+
+
 
 module.exports = router;

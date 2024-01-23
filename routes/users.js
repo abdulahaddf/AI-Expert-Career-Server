@@ -143,6 +143,7 @@ router.patch("/consultantinfoupdate", async (req, res) => {
         linkedin: userinfo?.linkedin,
         twitter: userinfo?.twitter,
         github: userinfo?.github,
+        prefertime: userinfo?.prefertime,
       },
     };
     const result = await usersCollection.updateOne(filter, updateDoc, options);
